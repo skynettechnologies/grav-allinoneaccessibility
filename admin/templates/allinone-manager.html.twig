@@ -1,0 +1,23 @@
+{% extends 'partials/base.html.twig' %}
+
+{% if admin.route %}
+    {% set context = admin.page(true) %}
+{% endif %}
+
+{% block titlebar %}
+    <div class="button-bar">
+        <a class="button" href="{{ base_url }}"><i class="fa fa-reply"></i> {{ "PLUGIN_ADMIN.BACK"|tu }}</a>
+        <button class="button" type="submit" name="task" value="save" form="blueprints"><i class="fa fa-check"></i> {{ "PLUGIN_ADMIN.SAVE"|tu }}</button>
+    </div>
+    <h1><i class="fa fa-fw fa-shield"></i> {{ "PLUGIN_ALLINONEACCESSIBILITY.ALLINONE_ACCESSIBILITY"|tu }}
+        <sub><a href="www.tecart.de" target="_blank"> {{ "PLUGIN_ALLINONEACCESSIBILITY.ALLINONE_ACCESSIBILITY_SUB"|tu }}</a></sub>
+    </h1>
+{% endblock %}
+
+{% block content %}
+
+    {% include 'partials/blueprints.html.twig' with { data: aioWidgetData, blueprints: aioWidgetData.blueprints } %}
+    <script type="text/javascript" src="../user/plugins/allinoneaccessibility/assets/js/aioa.js"></script>
+    <link rel="stylesheet" href="../user/plugins/allinoneaccessibility/assets/css/aioa.css">
+
+{% endblock %}

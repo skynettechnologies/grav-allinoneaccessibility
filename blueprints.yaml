@@ -1,0 +1,35 @@
+name: All in One Accessibility
+version: 0.1.12
+description: "All in One Accessibility widget improves #PLATFORM NAME# website ADA compliance and browser experience for ADA, 
+WCAG 2.1, Section 508, Australian DDA, European EAA EN 301 549, UK Equality Act (EA), Israeli Standard 5568, 
+California Unruh, Ontario AODA, Canada ACA, German BITV, and France RGAA Standards."
+icon: shield
+author:
+    name: Skynet Technologies USA LLC
+    email: hello@skynettechnologies.com
+    url: https://www.skynettechnologies.com/
+
+keywords: WCAG, ATAG, ADA, Section 508, accessibility compliance, disability friendly site, accessibility rules, web accessibility, compliance,WCAG 2.1, web accessibility widget,accessibility widget,accessibility plugin,web accessibility plugin,digital accessibility plugin,digital accessibility widget,web accessibility compliance,accessibe alternative,userways alternative,accessible website,Australian DDA,European EAA EN 301 549,UK Equality Act,Israeli Standard 5568
+docs: https://www.dropbox.com/s/de41n4xm9zjwxix/All-in-One-Accessibility-PRO-App-Usage-and-Functionality.pdf?dl=0
+license: MIT
+
+dependencies:
+    - { name: grav, version: '>=1.7.23' }
+    - { name: admin, version: '>=1.10.23' }
+
+form:
+    validation: strict
+    fields:
+        enabled:
+            type: toggle
+            label: PLUGIN_ADMIN.PLUGIN_STATUS
+            highlight: 1
+            default: 0
+            options:
+                1: PLUGIN_ADMIN.ENABLED
+                0: PLUGIN_ADMIN.DISABLED
+            validate:
+                type: bool
+        
+        
+            
