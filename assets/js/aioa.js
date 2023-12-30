@@ -18,13 +18,13 @@ bannerDiv.id = 'dicount_banner';
 document.getElementsByClassName('form-section')[0].prepend(bannerDiv);
 
 /* add Loader Div */
-let add_element = () => {
+// let add_element = () => {
     const template = document.createElement('div');
     template.innerHTML = '<img id="loading-image" src="../user/plugins/allinoneaccessibility/assets/img/loader.gif" alt="Loading..." />';
     template.id = 'tl_CusLoaderBox';
     
     document.getElementsByClassName('default-box-shadow')[0].prepend(template);
-}
+//}
 /* add Loader Div */
 
 if(licenseKey != null){
@@ -54,7 +54,7 @@ function ChangeIcon(val){
 
 function checkLicenseKey(key){
     console.log(key)
-    add_element();
+    //add_element();
     var server_name = window.location.hostname;
     var request = new XMLHttpRequest();
     var url =  'https://www.skynettechnologies.com/add-ons/license-api.php?';

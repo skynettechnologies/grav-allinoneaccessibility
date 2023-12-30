@@ -2,24 +2,31 @@
 
 # All in One Accessibility Plugin
 
-The **All in One Accessibility** Plugin is an admin panel extension for [Grav CMS](http://github.com/getgrav/grav).
+## Overview
 
+**All in One Accessibility** widget improves **Grav** website ADA compliance and browser experience for ADA, WCAG 2.1 & 2.2, Section 508, Australian DDA, European EAA EN 301 549, UK Equality Act (EA), Israeli Standard 5568, California Unruh, Ontario AODA, Canada ACA, German BITV, France RGAA, Brazilian Inclusion Law (LBI 13.146/2015), Spain UNE 139803:2012, JIS X 8341 (Japan), Italian Stanca Act and Switzerland DDA Standards.
+
+It uses the accessibility interface which handles UI and design related adjustments. All in One Accessibility app enhances your **Grav** website accessibility to people with hearing or vision impairments, motor impaired, color blind, dyslexia, cognitive & learning impairments, seizure and epileptic, and ADHD problems.
 
 **Features**
-- Admin All in One Accessibility to create scripts and change the color,position,icon-type,icon-size content
-- All in One Accessibility to enable or disable widget via opt-in
-- admin setting opt-in: yes/no means, if opt-in toggle is available for users on website accessibility widget
+- 2 Minute installation
+- AI widget Supports Over 65 Different Languages
+- Flexible and lightweight widget that can be changed according to law.
+- Reduces the risk of time-consuming accessibility lawsuits.
+- Screen Reader, widget color and accessibility profiles are the top features
 
+**Demo URL**
+- https://www.skynettechnologies.com/
 
 ## Screenshot
 
-**Admin Panel**
+**Admin Panel - Widget Setting**
 
 ![Widget Settings](screenshot_admin_setting.png)
 
 **Frontend**
 
-Allinoneaccessibility and widget
+All in One Accessibility  Widget
 
 ![Allinoneaccessibility and widget](screenshot_frontend.png)
 
@@ -65,9 +72,7 @@ data_storage: pages
 
 Note that if you use the Admin Plugin, a file with your configuration named allinoneaccessibility.yaml will be saved in the `user/config/plugins/`-folder once the configuration is saved in the Admin.
 
-## Add Link to Settings in Theme
+## License
 
-An example is a link on the website to open the widget window with the settings.
+The All in One Accessibility is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
-MIT License
-Copyright (c) 2019 Osano, Inc., A Public Benefit Corporation
