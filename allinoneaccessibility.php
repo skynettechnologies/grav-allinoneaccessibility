@@ -118,7 +118,7 @@ class AllinoneaccessibilityPlugin extends Plugin {
             $assets = $this->grav['assets'];
 
             //array for twig variables of allinoneaccessibility/blueprints.yaml//
-            
+            /* Get widget setting data from yaml file */
             $aioaWidegtData = AllinoneConsent::getYamlDataByType('allinone-manager');
             
             if(!$aioaWidegtData){
@@ -134,7 +134,7 @@ class AllinoneaccessibilityPlugin extends Plugin {
                 $icon_type = ($aioaWidegtData['aioa_icon_type']) ? ($aioaWidegtData['aioa_icon_type']) :'aioa-icon-type-1';
                 $icon_size = ($aioaWidegtData['aioa_icon_size']) ? ($aioaWidegtData['aioa_icon_size']) : 'aioa-medium-icon';
             }
-            
+            /* set that data in ADA script */
             $assets->addJs('https://www.skynettechnologies.com/accessibility/js/all-in-one-accessibility-js-widget-minify.js?colorcode='.$color.'&token='.$license_key.'&position='.$position.'.'.$icon_type.'.'.$icon_size.'', array('loading' => 'async'));
         }
     }

@@ -5,6 +5,7 @@
 {% endif %}
 
 {% block titlebar %}
+    {# here html for back and save button #}
     <div class="button-bar">
         <a class="button" href="{{ base_url }}"><i class="fa fa-reply"></i> {{ "PLUGIN_ADMIN.BACK"|tu }}</a>
         <button class="button" type="submit" name="task" value="save" form="blueprints"><i class="fa fa-check"></i> {{ "PLUGIN_ADMIN.SAVE"|tu }}</button>
@@ -15,8 +16,9 @@
 {% endblock %}
 
 {% block content %}
-
+    {# here add setting form blueprint #}
     {% include 'partials/blueprints.html.twig' with { data: aioWidgetData, blueprints: aioWidgetData.blueprints } %}
+    {# include custom js and css.in js file , add some events, functions which are used in setting form #}
     <script type="text/javascript" src="../user/plugins/allinoneaccessibility/assets/js/aioa.js"></script>
     <link rel="stylesheet" href="../user/plugins/allinoneaccessibility/assets/css/aioa.css">
 

@@ -9,28 +9,30 @@ children[2].setAttribute('class', 'form-field grid aioa-icon-position');
 children[3].setAttribute('class', 'form-field grid icon aioa-icon-type');
 children[4].setAttribute('class', 'form-field grid icon aioa-icon-size');
 
+/* add div for license Key msg */
 var iDiv = document.createElement("div");
 iDiv.id = 'licenseKeymsg';
 document.querySelector('.form-input-wrapper').appendChild(iDiv);
 
+/* add div for discount banner */
 var bannerDiv = document.createElement("div");
 bannerDiv.id = 'dicount_banner';
 document.getElementsByClassName('form-section')[0].prepend(bannerDiv);
 
 /* add Loader Div */
-// let add_element = () => {
+
     const template = document.createElement('div');
     template.innerHTML = '<img id="loading-image" src="../user/plugins/allinoneaccessibility/assets/img/loader.gif" alt="Loading..." />';
     template.id = 'tl_CusLoaderBox';
     
     document.getElementsByClassName('default-box-shadow')[0].prepend(template);
-//}
-/* add Loader Div */
 
+/* If key is not null call the checkLicenseKey() - for hide-show  icontype & iconsize div */
 if(licenseKey != null){
     checkLicenseKey(licenseKey)
 }
 
+/* If icon-type is not null call the ChangeIcon()  */
 if(chekedIconType != null){
     ChangeIcon(chekedIconType)
 }
@@ -45,6 +47,7 @@ $('.licenseKey').keyup(function() {
     checkLicenseKey(licenseKey)
 });
 
+/* set icon-size img url as per change icon type */
 function ChangeIcon(val){
     const arrSize = document.querySelectorAll(".icon-img");
     arrSize.forEach(function(item){
@@ -52,9 +55,8 @@ function ChangeIcon(val){
     });
 }
 
+/* here check the key valid or not */
 function checkLicenseKey(key){
-    console.log(key)
-    //add_element();
     var server_name = window.location.hostname;
     var request = new XMLHttpRequest();
     var url =  'https://www.skynettechnologies.com/add-ons/license-api.php?';
@@ -76,12 +78,14 @@ function checkLicenseKey(key){
             var elementIconSize = document.querySelectorAll('.iconSize');
             var elementCouponBanner = document.getElementById('dicount_banner');
 
+            /* if key is valid, hide dicount_banner Div,show Icon-Type & Icon-Size Setting,hide licenseKeymsg */
             if (response.valid == 1) {
                 $("#dicount_banner").hide();
                 $("#iconTypeDiv").show();
                 $("#iconSizeDiv").show();
                 $('#licenseKeymsg').hide();
             }else{
+                /* if key is not valid, call setCouponBanner(),hide Icon-Type & Icon-Size Setting,show licenseKeymsg */
                 setCouponBanner();
                 $("#iconTypeDiv").hide();
                 $("#iconSizeDiv").hide();
@@ -100,6 +104,7 @@ function checkLicenseKey(key){
       request.send(params);
 }
 
+/* Save the setting data in Dashboard */
 function saveData(){
     var server_name = window.location.origin;
     var color = $(".color").val();
@@ -124,6 +129,7 @@ function saveData(){
       request.send(params);
 }
 
+/* set discount coupon banner */
 function setCouponBanner(){
     var coupon_url = 'https://www.skynettechnologies.com/add-ons/discount_offer.php?platform=getgrav';
     fetch(coupon_url)
