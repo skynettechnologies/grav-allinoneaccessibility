@@ -1,4 +1,4 @@
-# All in One Accessibility™
+# All in One Accessibility
 
 All in One Accessibility AI free Widget Supports limited 23 features only and includes 140 Languages. 
    
