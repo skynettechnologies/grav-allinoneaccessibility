@@ -31,7 +31,7 @@ class AllinoneaccessibilityPlugin extends Plugin {
     protected $routes = [
                 'allinone-manager'
                ];
-
+ 
     /**
      * admin controller
      * @type string

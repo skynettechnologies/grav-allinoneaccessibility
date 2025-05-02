@@ -15,7 +15,7 @@ use Grav\Common\File\CompiledYamlFile;
 class AllinoneManager extends Data {
 
     /**
-     * Get the All in One data list from user/data/ yaml files
+     * Get the All in One data list from user/data/ yaml files 
      *
      * @return array
      */

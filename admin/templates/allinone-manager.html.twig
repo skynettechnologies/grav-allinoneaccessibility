@@ -32,12 +32,8 @@
 <h1> </h1>
 <style>
 .btn [class*=" icon-"], .btn [class^=icon-], .s-btn [class*=" icon-"], .s-btn [class^=icon-], [class*=" icon-"], [class^=icon-], i.icon, span.icon {
-    /* background-repeat: no-repeat; */
-    /* background-size: contain; */
     display: contents;
-    /* height: 16px; */
-    /* vertical-align: -3px; */
-    /* width: 16px; */
+  
 }
 .hide
 {
@@ -801,7 +797,6 @@
 
     <script>
   // User details
-
         const username = "{{ grav.user.username }}";
         const email = "{{ grav.user.email }}";
         const website =  btoa("{{ grav.uri.host }}");// Base64 encode
@@ -900,9 +895,6 @@ var website_name = btoa(domain_name);
       
         // Fetch initial response for the default domain
     };
-
-    // Function to update the domain name on dropdown change
-   
 
     // Function to fetch API response using POST
     function fetchApiResponse(domain_name) {
@@ -1236,16 +1228,7 @@ window.onload = function () {
         custSizePreview.setAttribute("height", ico_size_value);
         custSizePreviewLabel.innerHTML = ico_size_value;
       }
-    //   if (ico_size_value < 20) {
-    //     custSizePreview.setAttribute("width", 20);
-    //     custSizePreview.setAttribute("height", 20);
-    //     custSizePreviewLabel.innerHTML = 20;
-    //   }
-    //   if (ico_size_value > 150) {
-    //     custSizePreview.setAttribute("width", 150);
-    //     custSizePreview.setAttribute("height", 150);
-    //     custSizePreviewLabel.innerHTML = 150;
-    //   }
+    
   });
 
 

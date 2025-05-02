@@ -9,13 +9,13 @@ use Grav\Common\File\CompiledYamlFile;
 
 
 /**
- * All in One Accessibility Plugin Allinone Manager Class
+ * All in One Accessibility Plugin Allinone Manager Class 
  *
  */
 class AllinoneConsent extends Data {
 
     /**
-     * get data object of given type
+     * get data object of given type 
      *
      * @return object
      */
