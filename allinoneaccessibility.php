@@ -31,7 +31,7 @@ class AllinoneaccessibilityPlugin extends Plugin {
     protected $routes = [
                 'allinone-manager'
                ];
- 
+
     /**
      * admin controller
      * @type string
@@ -118,9 +118,9 @@ class AllinoneaccessibilityPlugin extends Plugin {
             $assets = $this->grav['assets'];
 
             //array for twig variables of allinoneaccessibility/blueprints.yaml//
-            
+
             $aioaWidegtData = AllinoneConsent::getYamlDataByType('allinone-manager');
-            
+
             if(!$aioaWidegtData){
                 $license_key = '';
                 $color = '#420083';
@@ -134,7 +134,7 @@ class AllinoneaccessibilityPlugin extends Plugin {
                 $icon_type = ($aioaWidegtData['aioa_icon_type']) ? ($aioaWidegtData['aioa_icon_type']) :'aioa-icon-type-1';
                 $icon_size = ($aioaWidegtData['aioa_icon_size']) ? ($aioaWidegtData['aioa_icon_size']) : 'aioa-medium-icon';
             }
-            
+
             $assets->addJs('https://www.skynettechnologies.com/accessibility/js/all-in-one-accessibility-js-widget-minify.js?colorcode='.$color.'&token='.$license_key.'&position='.$position.'.'.$icon_type.'.'.$icon_size.'', array('loading' => 'async'));
         }
     }
@@ -144,7 +144,7 @@ class AllinoneaccessibilityPlugin extends Plugin {
      */
     public function onAdminMenu() {
         if ($this->isAdmin()) {
-            $this->grav['twig']->plugins_hooked_nav['PLUGIN_ALLINONEACCESSIBILITY.ALLINONE_ACCESSIBILITY'] = ['route' => $this->routes[0], 'icon' => 'fa-shield'];
+            $this->grav['twig']->plugins_hooked_nav['PLUGIN_ALLINONEACCESSIBILITY.ALLINONE_ACCESSIBILITY'] = ['route' => $this->routes[0], 'icon' => 'fa-universal-access'];
         }
     }
 
@@ -174,9 +174,9 @@ class AllinoneaccessibilityPlugin extends Plugin {
     }
 
     public function onAdminData(Event $event) {
-        
+
         $type = $event['type']; //current route
-        
+
         // Check if current context is a custom page
         if(in_array($type, $this->routes)) {
 
@@ -184,12 +184,12 @@ class AllinoneaccessibilityPlugin extends Plugin {
             $blueprint  = AllinoneManager::getCurrentAllinoneManagerBlueprint();
             $obj        = new Data(AllinoneManager::getAllinoneManagerData(), $blueprint);
             $post       = $this->adminController->data;
-            
+
             //location of yaml files
             $dataStorage = $this->dataStorageDefault;
-            
+
             $aioa_website_hostname = $_SERVER['SERVER_NAME'];
-            
+
             $curl = curl_init();
             curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://ada.skynettechnologies.us/check-website',
@@ -202,17 +202,16 @@ class AllinoneaccessibilityPlugin extends Plugin {
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => array('domain' =>  $aioa_website_hostname),
             ));
-        
+
             $response = curl_exec($curl);
-        
+
             curl_close($curl);
             $settingURLObject = json_decode($response);
-            
-            
+
+
             if(($post['aioa_license_key'] != '') && ($settingURLObject->status != 0) ){
-                
+
                 $position = $post['aioa_position'];
-           
                 $ch = curl_init();
                 curl_setopt_array($ch, array(
                 CURLOPT_URL => 'https://ada.skynettechnologies.us/api/widget-setting-update-platform',
@@ -225,16 +224,12 @@ class AllinoneaccessibilityPlugin extends Plugin {
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => array('u' =>  'getgrav.skynettechnologies.us','widget_position'=>$post['aioa_position'],'widget_color_code'=>$post['aioa_color'],'widget_icon_type'=>$post['aioa_icon_type'],'widget_icon_size'=>$post['aioa_icon_size'])
                 ));
-            
                 $res = curl_exec($ch);
-            
+
                 curl_close($ch);
                 $settingObj = json_decode($res);
-              
-                
-                
             }
-            
+
             if($post){
                 $obj->merge($post);
                 $event['data_type'] = $obj;

@@ -7,4 +7,7 @@
 ## v1.0.3
 * Update New Widget Settings
 
+## v1.0.4
+* Update Widget Settings API'S
+
 

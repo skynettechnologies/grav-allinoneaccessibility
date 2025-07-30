@@ -1,3 +1,6 @@
+body .all-in-one-accessibility-wrap [class^="icon-"], body .all-in-one-accessibility-wrap [class*=" icon-"] {
+  font-family: unset !important;
+}
  [type="radio"]:checked,
       [type="radio"]:not(:checked) {
         position: absolute;
@@ -142,7 +145,7 @@
       .form-radios .form-radio-item {
         margin-bottom: 10px;
       }
- 
+
 
     <hr>
 
@@ -178,10 +181,10 @@
         color: #e82757;
       }
 
-      .icon-type-wrapper .row label,
+      /*.icon-type-wrapper .row label,
       .icon-size-wrapper .row label {
         background: #211f1f;
-      }
+      }*/
 
       .icon-type-wrapper .row {
         flex-wrap: wrap;
@@ -221,7 +224,7 @@
       .vertical-container select {
         display: block;
       }
-    
+
 $headingh2: 36px;
 $headingh3: 22px;
 $dark-blue: #420083;
@@ -603,6 +606,7 @@ a,
   }
 }
 .all-in-one-accessibility-wrap {
+  padding: 50px 20px 20px 20px;
   .accessibility-settings {
     h2 {
       font-size: 36px;
@@ -618,12 +622,11 @@ a,
             box-shadow: #ddd 0px 0px 11px 0px;*/
       margin: 0 auto 40px;
       border-radius: 19px;
-      background: #e9efff;
       padding: 27px 20px 30px 20px;
-      .all-one-accessibility-form-inner {
+      /*.all-one-accessibility-form-inner {
         margin: 0 auto;
         max-width: 755px;
-      }
+      }*/
       *:not(.form-text) {
         font-size: 17px;
       }

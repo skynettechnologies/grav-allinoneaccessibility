@@ -15,12 +15,12 @@ use Grav\Common\File\CompiledYamlFile;
 class AllinoneManager extends Data {
 
     /**
-     * Get the All in One data list from user/data/ yaml files 
+     * Get the All in One data list from user/data/ yaml files
      *
      * @return array
      */
     public static function getAllinoneManagerData() {
-       
+
         $aioWidgetData = self::getYamlDataObjType(self::getCurrentAllinoneManagerPath());
 
         return $aioWidgetData;
@@ -48,7 +48,7 @@ class AllinoneManager extends Data {
     /**
      * get current allinone manager blueprint
      *
-     * @return string
+     * @return \Grav\Common\Data\Blueprint
      */
     public static function getCurrentAllinoneManagerBlueprint() {
 
@@ -78,7 +78,7 @@ class AllinoneManager extends Data {
     /**
      * get data object of given type
      *
-     * @return object
+     * @return array
      */
     public static function getYamlDataObjType($type) {
 
@@ -88,6 +88,6 @@ class AllinoneManager extends Data {
         return CompiledYamlFile::instance(Grav::instance()['locator']->findResource($dataStorage) . DS . $type . ".yaml")->content();
     }
 
-    
+
 
 }
