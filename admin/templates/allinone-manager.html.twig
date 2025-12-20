@@ -741,17 +741,44 @@
   <script>
   // User details
   const domain = window.location.hostname;
-  const username = "Dear Customer";
-  const email = "no-reply@getgrav.com";
   const website = btoa(domain);
-
-  console.log(username, email, website);
+  const urlParams = new URLSearchParams(window.location.search);
+  const username = urlParams.get('username') || domain || 'Dear Customer';
+  const useremail = urlParams.get('email') || `no-reply@${domain}`;
+  console.log(website,username,useremail);
   // Function to call add-user-domain API directly
-  function fetchApiData(website) {
+  async function getCountryData() {
+    // Check if sessionStorage already has visitor data
+    const sessionData = sessionStorage.getItem('visitor_data');
+    if (sessionData) {
+      return JSON.parse(sessionData);
+    }
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      if (!response.ok) throw new Error('Failed to fetch visitor data');
+      const data = await response.json();
+      const visitorData = {
+        country_code: data.country_code || 'Unknown',
+        in_eu: data.in_eu ?? false
+      };
+      sessionStorage.setItem('visitor_data', JSON.stringify(visitorData));
+      return visitorData;
+    } catch (error) {
+      console.error('Error fetching visitor data:', error);
+      return {
+        country_code: 'Unknown',
+        in_eu: false
+      };
+    }
+  }
+  async function fetchApiData(website) {
+    const visitorData = await getCountryData();
+    const is_eu = visitorData.in_eu ? 0 : 1;
+    console.log(visitorData, is_eu);
     const packageType = "free-widget";
     const arrDetails = {
       name: username,
-      email: email,
+      email: useremail,
       company_name: '',
       website: website,
       package_type: packageType,
@@ -770,7 +797,8 @@
       post_code: '',
       transaction_id: '',
       subscr_id: '',
-      payment_source: ''
+      payment_source: '',
+      no_required_eu: is_eu
     };
     console.log('Details to send:', arrDetails);
     const apiUrl = "https://ada.skynettechnologies.us/api/add-user-domain";
@@ -845,18 +873,18 @@
             // Check if result and result.Data are valid
             if (result && result.Data && Object.keys(result.Data).length > 0) {
               const settings = {
-                  widget_position: result.Data.widget_position || defaultSettings.widget_position,
-                  widget_color_code: result.Data.widget_color_code || defaultSettings.widget_color_code,
-                  widget_icon_type: result.Data.widget_icon_type || defaultSettings.widget_icon_type,
-                  widget_icon_size: result.Data.widget_icon_size || defaultSettings.widget_icon_size,
-                  widget_size: result.Data.widget_size || defaultSettings.widget_size,
-                  widget_icon_size_custom: result.Data.widget_icon_size_custom || defaultSettings.widget_icon_size_custom,
-                  is_widget_custom_size: result.Data.is_widget_custom_size || defaultSettings.is_widget_custom_size,
-                  is_widget_custom_position: result.Data.is_widget_custom_position || defaultSettings.is_widget_custom_position,
-                  widget_position_top: result.Data.widget_position_top || 0,
-                  widget_position_bottom: result.Data.widget_position_bottom || 0,
-                  widget_position_left: result.Data.widget_position_left || 0,
-                  widget_position_right: result.Data.widget_position_right || 0,
+                widget_position: result.Data.widget_position || "bottom_right",
+                widget_color_code: result.Data.widget_color_code || "#420083",
+                widget_icon_type: result.Data.widget_icon_type || "aioa-icon-type-1",
+                widget_icon_size: result.Data.widget_icon_size || "aioa-small-icon",
+                widget_size: result.Data.widget_size,
+                widget_icon_size_custom: result.Data.widget_icon_size_custom,
+                widget_position_top: result.Data.widget_position_top,
+                widget_position_bottom: result.Data.widget_position_bottom,
+                widget_position_left: result.Data.widget_position_left,
+                widget_position_right: result.Data.widget_position_right,
+                is_widget_custom_size: result.Data.is_widget_custom_size || 0,
+                is_widget_custom_position: result.Data.is_widget_custom_position || 0,
                 };
 
                 populateSettings(settings);
@@ -903,93 +931,31 @@ function fetchSettings() {
 // Populate form fields with settings
 function populateSettings(settings) {
 
- // custom size switcher
-  if (settings.is_widget_custom_size === 1) {
-    $("#custom-size-switcher").prop("checked", true); // Check the checkbox
-    $(".custom-size-controls").removeClass("hide"); // Show custom size controls
-    $(".widget-icon").addClass("hide"); // Hide widget icon
-  } else {
-    console.log("settings1"+settings.is_widget_custom_size);
-    $("#custom-size-switcher").prop("checked", false); // Uncheck the checkbox
-    $(".custom-size-controls").addClass("hide"); // Hide custom size controls
-    $(".widget-icon").removeClass("hide"); // Show widget icon
-  }
+  const $sizeSwitcher = $("#custom-size-switcher");
+  const $positionSwitcher = $("#custom-position-switcher");
 
-  // Toggle behavior for #custom-size-switcher
-  $("#custom-size-switcher").click(function () {
+  // Set switcher states
+  $sizeSwitcher.prop("checked", settings.is_widget_custom_size === 1);
+  $positionSwitcher.prop("checked", settings.is_widget_custom_position === 1);
 
+  // Trigger the UI update by manually calling change handler
+  toggleCustomSizeUI(settings.is_widget_custom_size === 1);
+  toggleCustomPositionUI(settings.is_widget_custom_position === 1);
 
-    settings.is_widget_custom_size = $(this).is(":checked") ? 1 : 0; // Update the value
-    if (settings.is_widget_custom_size === 1) {
-      $(".custom-size-controls").removeClass("hide");
-      $(".widget-icon").addClass("hide");
-    } else {
-      console.log("settings2"+settings.is_widget_custom_size);
-      $(".custom-size-controls").addClass("hide");
-      $(".widget-icon").removeClass("hide");
-    }
+  // Attach change handlers
+  $sizeSwitcher.off("change").on("change", function () {
+    const enabled = $(this).is(":checked");
+    settings.is_widget_custom_size = enabled ? 1 : 0;
+    toggleCustomSizeUI(enabled);
   });
 
-  // Simulated API update after fetching settings
-  setTimeout(() => {
-
-    $("#custom-size-switcher").prop("checked", settings.is_widget_custom_size === 1);
-    if (settings.is_widget_custom_size === 1) {
-      $(".custom-size-controls").removeClass("hide");
-      $(".widget-icon").addClass("hide");
-    } else {
-      console.log("settings3"+settings.is_widget_custom_size);
-      $(".custom-size-controls").addClass("hide");
-      $(".widget-icon").removeClass("hide");
-    }
-  }, 1000);
-
-
-// custom position switcher
-if (settings.is_widget_custom_position === 1) {
-  $("#custom-position-switcher").prop("checked", true); // Check the checkbox
-  $(".custom-position-controls").removeClass("hide"); // Show custom size controls
-  $(".widget-position").addClass("hide"); // Hide widget icon
-} else {
-  console.log("settings1"+settings.is_widget_custom_position);
-  $("#custom-position-switcher").prop("checked", false); // Uncheck the checkbox
-  $(".custom-position-controls").addClass("hide"); // Hide custom size controls
-  $(".widget-position").removeClass("hide"); // Show widget icon
-}
-
-// Toggle behavior for #custom-size-switcher
-$("#custom-position-switcher").click(function () {
-
-
-  settings.is_widget_custom_position = $(this).is(":checked") ? 1 : 0; // Update the value
-  if (settings.is_widget_custom_position === 1) {
-    $(".custom-position-controls").removeClass("hide");
-    $(".widget-position").addClass("hide");
-  } else {
-    console.log("settings2"+settings.is_widget_custom_position);
-    $(".custom-position-controls").addClass("hide");
-    $(".widget-position").removeClass("hide");
-  }
-});
-
-// Simulated API update after fetching settings
-setTimeout(() => {
-
-  $("#custom-position-switcher").prop("checked", settings.is_widget_custom_position === 1);
-  if (settings.is_widget_custom_position === 1) {
-    $(".custom-position-controls").removeClass("hide");
-    $(".widget-position").addClass("hide");
-  } else {
-    console.log("settings3"+settings.is_widget_custom_position);
-    $(".custom-position-controls").addClass("hide");
-    $(".widget-position").removeClass("hide");
-  }
-}, 1000);
+  $positionSwitcher.off("change").on("change", function () {
+    const enabled = $(this).is(":checked");
+    settings.is_widget_custom_position = enabled ? 1 : 0;
+    toggleCustomPositionUI(enabled);
+  });
 
 // end size position
-
-
-
 
   const colorField = document.getElementById("colorcode");
   if (colorField) {
@@ -1028,40 +994,51 @@ setTimeout(() => {
 
   // Set custom position fields
   const customPositionXField = document.getElementById("custom_position_x_value");
-
   const xDirectionSelect = $(".custom-position-controls select")[0];
 
-if (customPositionXField && xDirectionSelect) {
-  if (settings.widget_position_right > 0) {
-    customPositionXField.value = settings.widget_position_right;
-    xDirectionSelect.value = "cust-pos-to-the-right";
-  } else if (settings.widget_position_left > 0) {
-    customPositionXField.value = settings.widget_position_left;
-    xDirectionSelect.value = "cust-pos-to-the-left";
-  } else {
-    customPositionXField.value = 0;
-    xDirectionSelect.value = "cust-pos-to-the-right"; // Default direction
+  if (customPositionXField && xDirectionSelect) {
+    if (settings.widget_position_right != null && settings.widget_position_right >= 0) {
+      customPositionXField.value = settings.widget_position_right;
+      xDirectionSelect.value = "cust-pos-to-the-right";
+    } else if (settings.widget_position_left != null && settings.widget_position_left >= 0) {
+      customPositionXField.value = settings.widget_position_left;
+      xDirectionSelect.value = "cust-pos-to-the-left";
+    } else {
+      customPositionXField.value = 0; // default
+      xDirectionSelect.value = "cust-pos-to-the-right"; // default direction
+    }
   }
-}
 
 
-const customPositionYField = document.getElementById("custom_position_y_value");
+  const customPositionYField = document.getElementById("custom_position_y_value");
+  const yDirectionSelect = $(".custom-position-controls select")[1];
 
-const yDirectionSelect = $(".custom-position-controls select")[1];
-if (customPositionYField && yDirectionSelect) {
-  if (settings.widget_position_bottom > 0) {
-    customPositionYField.value = settings.widget_position_bottom;
-    yDirectionSelect.value = "cust-pos-to-the-lower";
-  } else if (settings.widget_position_top > 0) {
-    customPositionYField.value = settings.widget_position_top;
-    yDirectionSelect.value = "cust-pos-to-the-upper";
-  } else {
-    customPositionYField.value = 0;
-    yDirectionSelect.value = "cust-pos-to-the-lower"; // Default direction
+  if (customPositionYField && yDirectionSelect) {
+    if (settings.widget_position_bottom != null && settings.widget_position_bottom >= 0) {
+      customPositionYField.value = settings.widget_position_bottom;
+      yDirectionSelect.value = "cust-pos-to-the-lower";
+    } else if (settings.widget_position_top != null && settings.widget_position_top >= 0) {
+      customPositionYField.value = settings.widget_position_top;
+      yDirectionSelect.value = "cust-pos-to-the-upper";
+    } else {
+      customPositionYField.value = 0; // default
+      yDirectionSelect.value = "cust-pos-to-the-lower"; // default direction
+    }
   }
-}
 
 }
+
+  function toggleCustomSizeUI(enabled) {
+    $(".custom-size-controls").toggleClass("hide", !enabled);
+    $(".widget-icon").toggleClass("hide", enabled);
+    $("#custom-size-switcher").closest(".custom-checkbox").toggleClass("selected", enabled);
+  }
+
+  function toggleCustomPositionUI(enabled) {
+    $(".custom-position-controls").toggleClass("hide", !enabled);
+    $(".widget-position").toggleClass("hide", enabled);
+    $("#custom-position-switcher").closest(".custom-checkbox").toggleClass("selected", enabled);
+  }
 
 
 // Fetch settings when the page loads
@@ -1204,24 +1181,6 @@ if (customPositionYField && yDirectionSelect) {
       var icon_size = document.querySelector('input[name="aioa_icon_size"]:checked').value;
 
     });
-
-
-
-
-
-// Set the initial server name and display it
-        window.onload = function () {
-          var server_name = domain
-        };
-
-        // Function to update the server name on dropdown change
-
-
-
-
-
-
-
 // Declare variables in the global scope so they can be accessed throughout
 let is_widget_custom_position = 0;
 let is_widget_custom_size = 0;
@@ -1268,6 +1227,14 @@ function populatecustom(settings) {
             var icon_size = document.querySelector('input[name="aioa_icon_size"]:checked').value;
             var widget_size = document.querySelector('input[name="widget_size"]:checked').value;
             var widget_icon_size_custom = $("#widget_icon_size_custom").val();
+            if (is_widget_custom_size === 1) {
+              const customSize = parseInt(widget_icon_size_custom, 10);
+              if (isNaN(customSize) || customSize < 20 || customSize > 150) {
+                alert("The icon size must be between 20 and 150px.");
+                document.getElementById("loader").style.display = "none";
+                return;
+              }
+            }
 
             const custom_position_x = $("#custom_position_x_value").val() || 0;
             const custom_position_y = $("#custom_position_y_value").val() || 0;
@@ -1291,25 +1258,24 @@ function populatecustom(settings) {
                 widget_position_top = custom_position_y;
             }
             // Update Widget Setting on ADA dashboard
-              var url = 'https://ada.skynettechnologies.us/api/widget-setting-update-platform';
-
-              var params = 'u=' + server_name
-            + '&widget_position=' + icon_position
-            + '&is_widget_custom_position=' + is_widget_custom_position
-            + '&is_widget_custom_size=' + is_widget_custom_size
-            + '&widget_color_code=' + colorcode
-            + '&widget_icon_type=' + icon_type
-            + '&widget_icon_size=' + icon_size
-            + '&widget_size=' + widget_size
-            + '&widget_icon_size_custom=' + widget_icon_size_custom
-            + '&widget_position_right=' + widget_position_right
-            + '&widget_position_left=' + widget_position_left
-            + '&widget_position_top=' + widget_position_top
-            + '&widget_position_bottom=' + widget_position_bottom;
-              // Create the request
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', url, true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+              var payload = {
+                u: server_name,
+                widget_position: icon_position,
+                is_widget_custom_position: is_widget_custom_position,
+                is_widget_custom_size: is_widget_custom_size,
+                widget_color_code: colorcode,
+                widget_icon_type: icon_type,
+                widget_icon_size: icon_size,
+                widget_size: widget_size,
+                widget_icon_size_custom: widget_icon_size_custom,
+                widget_position_right: widget_position_right,
+                widget_position_left: widget_position_left,
+                widget_position_top: widget_position_top,
+                widget_position_bottom: widget_position_bottom
+              };
+              var xhr = new XMLHttpRequest();
+              xhr.open('POST', 'https://ada.skynettechnologies.us/api/widget-setting-update-platform', true);
+              xhr.setRequestHeader('Content-Type', 'application/json');
 
                 xhr.onload = function () {
                     if (xhr.status === 200) {
@@ -1327,15 +1293,9 @@ function populatecustom(settings) {
                 xhr.onerror = function () {
                     alert('Request failed. Please check your network connection.');
                 };
-
                 // Send the request with parameters
-                xhr.send(params);
-
-
-
-
+              xhr.send(JSON.stringify(payload));
             }
-
         </script>
 
 
