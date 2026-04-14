@@ -127,11 +127,11 @@ class AllinoneaccessibilityPlugin extends Plugin {
             $domain = $_SERVER['HTTP_HOST'] ?? '';
             $domain_base64 = base64_encode($domain);
             // --------------------------------------
-            // CALL add-user-domain API
+            // CALL API to Fetch EU
             // --------------------------------------
-            $apiUrl = 'https://ada.skynettechnologies.us/api/add-user-domain';
+            $apiUrl = 'https://ada.skynettechnologies.us/api/widget-settings';
             $postData = http_build_query([
-                'website' => $domain_base64
+                'website_url' => $domain
             ]);
 
             $ch = curl_init($apiUrl);
@@ -149,7 +149,7 @@ class AllinoneaccessibilityPlugin extends Plugin {
             curl_close($ch);
 
             $apiResponse = json_decode($response, true);
-            $no_required_eu = (int) ($apiResponse['website_data']['no_required_eu'] ?? 1);
+            $no_required_eu = (int) ($apiResponse['Data']['no_required_eu'] ?? 1);
 
             $assets->addInlineJs("
                 console.log('ADA API Response:', " . json_encode($apiResponse) . ");

@@ -10,4 +10,6 @@
 ## v1.0.4
 * Update Widget Settings API'S
 
+## v1.0.24
+* Update API's For Front Widget
 
